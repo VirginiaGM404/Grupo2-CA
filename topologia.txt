@@ -1,0 +1,85 @@
+--------------------------------------------------
+                    Topología
+--------------------------------------------------
+
+                      +-------------------+
+                      |    Router/Gateway |
+                      |   192.168.1.1     |
+                      +---------+---------+
+                                |
+                      +---------+---------+
+                      | Red Local (LAN)   |
+                      |   192.168.1.0/24  |
+                      +---------+---------+
+                                |
+                      +---------+---------+
+                      | Máquina Virtual   |
+                      | Debian 11         |
+                      | 192.168.1.100     |
+                      +-------------------+
+                                |
+        +-----------------------------------------+
+        | Servicios Configurados                  |
+        |                                         |
+        | - Apache2:                              |
+        |    - Puerto: 8080                       |
+        |    - Dominio: www_dir                   |
+        |    - DocumentRoot: /mnt/www_dir         |
+        |                                         |
+        | - MariaDB:                              |
+        |    - Base de datos cargada desde db.sql |
+        |    - Usado por index.php en Apache      |
+        |                                         |
+        | - SSH:                                  |
+        |    - Clave pública: /root/.ssh/         |
+        |      authorized_keys                    |
+        |    - Conexión remota:                   |
+        |      ssh -i clave_privada_sonda.txt     |
+        |      root@192.168.1.100                 |
+        +-----------------------------------------+
+                                |
+      +------------------------------------------------------------+
+      | Particiones en Disco Secundario                            |
+      |                                                            |
+      | - /mnt/www_dir (3GB, ext4):                                |
+      |      - Archivos web servidos por Apache:                   |
+      |        index.php, logo.png                                 |
+      | - /mnt/backup_dir (6GB, ext4):                             |
+      |      - Almacenamiento de backups generados por             |
+      |        backup_full.sh                                      |
+      |      - Respaldo planificado con cron:                      |
+      |        - /var/logs todos los días a las 00:00              |
+      |        - /mnt/www_dir los lunes, miércoles y viernes       |
+      |          a las 22:00                                       |
+      +------------------------------------------------------------+
+                                |
+        +----------------------------------------------------+
+        | Acceso desde Máquina Física (Anfitriona)           |
+        |                                                    |
+        | - Carpeta Compartida: /media/sf_Compartida         |
+        |   - Transferencia de archivos entre ambas máquinas |
+        |   - Contiene:                                       |
+        |      - Backups (*.tar.gz)                          |
+        |      - Archivos de entrega: topologia.txt, README  |
+        |                                                    |
+        | - Conexión SSH:                                    |
+        |   - Clave privada en el anfitrión                  |
+        |   - Clave pública en la máquina virtual            |
+        +----------------------------------------------------+
+
+Resumen de Configuración de la Red:
+-----------------------------------
+- Máquina Virtual:
+  - Dirección IP: 192.168.1.100
+  - Máscara de Red: 255.255.255.0
+  - Puerta de Enlace: 192.168.1.1
+  - Accesible desde el navegador:
+      - http://192.168.1.100:8080
+      - http://www_dir:8080
+  - Archivos servidos por Apache en /mnt/www_dir.
+
+- Máquina Física:
+  - Carpeta Compartida: Acceso a backups y entregables.
+  - SSH: Comunicación con clave privada (en anfitrión) y clave pública (en VM).
+
+--------------------------------------------------
