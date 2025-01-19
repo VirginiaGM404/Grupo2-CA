@@ -3,13 +3,13 @@
 --------------------------------------------------
 
                       +-------------------+
-                      |    Router/Gateway |
-                      |   192.168.1.1     |
+                      |  Router/Gateway   |
+                      |  192.168.1.1      |
                       +---------+---------+
                                 |
                       +---------+---------+
-                      | Red Local (LAN)   |
-                      |   192.168.1.0/24  |
+                      |  Red Local (LAN)  |
+                      |  192.168.1.0/24   |
                       +---------+---------+
                                 |
                       +---------+---------+
@@ -58,13 +58,18 @@
         |                                                    |
         | - Carpeta Compartida: /media/sf_Compartida         |
         |   - Transferencia de archivos entre ambas máquinas |
-        |   - Contiene:                                       |
-        |      - Backups (*.tar.gz)                          |
+        |   - Contiene:                                      |
+        |      - Copias de directorios /root, /etc, /opt,    |
+        |       /var, /www_dir y /backup_dir (*.tar.gz)      |
         |      - Archivos de entrega: topologia.txt, README  |
         |                                                    |
         | - Conexión SSH:                                    |
         |   - Clave privada en el anfitrión                  |
         |   - Clave pública en la máquina virtual            |
+        |                                                    |
+        | - Acceso a red local (LAN):                        |
+        |   - Accesible desde el navegador:                  |
+        |   http://www_dir:8080 y http://192.168.1.100:8080  |
         +----------------------------------------------------+
 
 Resumen de Configuración de la Red:
@@ -79,7 +84,7 @@ Resumen de Configuración de la Red:
   - Archivos servidos por Apache en /mnt/www_dir.
 
 - Máquina Física:
-  - Carpeta Compartida: Acceso a backups y entregables.
+  - Carpeta Compartida: Acceso a copias de directorios requeridos y demás archivos entregables.
   - SSH: Comunicación con clave privada (en anfitrión) y clave pública (en VM).
-
+  - Acceso a red local (LAN) http://www_dir:8080 y http://192.168.1.100:8080
 --------------------------------------------------
